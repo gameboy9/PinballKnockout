@@ -378,6 +378,7 @@
 			Controls.Add(label1);
 			Name = "Form1";
 			Text = "Pinball Strikes Knockout Calculator";
+			FormClosing += Form1_FormClosing;
 			Load += Form1_Load;
 			((System.ComponentModel.ISupportInitialize)p41).EndInit();
 			((System.ComponentModel.ISupportInitialize)p42).EndInit();

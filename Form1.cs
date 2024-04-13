@@ -20,7 +20,7 @@ namespace PinballKnockout
 		{
 			try
 			{
-				using (TextReader reader = File.OpenText("lastFF4FG.txt"))
+				using (TextReader reader = File.OpenText("lastKP.txt"))
 				{
 					playerCount.Value = Convert.ToDecimal(reader.ReadLine());
 					groupSize.SelectedIndex = Convert.ToInt32(reader.ReadLine());
@@ -47,8 +47,8 @@ namespace PinballKnockout
 				groupSize.SelectedIndex = 2; // 4 player groups
 				strikes.Value = 6;
 				endPlayers.Value = 1;
-				bestScore.Text = "400";
-				worstScore.Text = "100";
+				bestScore.Text = "40000";
+				worstScore.Text = "10000";
 				commonFormats.SelectedIndex = 0; // fair strikes
 				p21.Value = 0;
 				p22.Value = 1;
@@ -61,6 +61,29 @@ namespace PinballKnockout
 				p44.Value = 2;
 
 				calcBestWorstChances(null, null);
+			}
+		}
+
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			using (StreamWriter writer = File.CreateText("lastKP.txt"))
+			{
+				writer.WriteLine(playerCount.Value);
+				writer.WriteLine(groupSize.SelectedIndex);
+				writer.WriteLine(strikes.Value);
+				writer.WriteLine(endPlayers.Value);
+				writer.WriteLine(bestScore.Text);
+				writer.WriteLine(worstScore.Text);
+				writer.WriteLine(commonFormats.SelectedIndex);
+				writer.WriteLine(p21.Value);
+				writer.WriteLine(p22.Value);
+				writer.WriteLine(p31.Value);
+				writer.WriteLine(p32.Value);
+				writer.WriteLine(p33.Value);
+				writer.WriteLine(p41.Value);
+				writer.WriteLine(p42.Value);
+				writer.WriteLine(p43.Value);
+				writer.WriteLine(p44.Value);
 			}
 		}
 
