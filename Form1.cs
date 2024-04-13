@@ -158,7 +158,7 @@ namespace PinballKnockout
 			Result.Text = "Average rounds:  " + string.Format("{0:##.00}", roundResult.Average()) +
 				"\r\nMost rounds:  " + maxRounds +
 				"\r\nLeast rounds:  " + minRounds +
-				"\r\nBest range:  " + string.Format("{0:##.00}", avg - stdDev) + " to " + string.Format("{0:##.00}", avg + stdDev);
+				"\r\n95% range:  " + string.Format("{0:##.00}", avg - (stdDev * 2)) + " to " + string.Format("{0:##.00}", avg + (stdDev * 2));
 		}
 
 		private double StandardDeviation(IEnumerable<double> values)
