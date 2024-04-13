@@ -127,8 +127,17 @@ namespace PinballKnockout
 			int totalRounds = 0;
 			int minRounds = 9999;
 			int maxRounds = 0;
-			int topScore = Convert.ToInt32(bestScore.Text);
-			int lowScore = Convert.ToInt32(worstScore.Text);
+			int topScore = 0;
+			int lowScore = 0;
+			try
+			{
+				topScore = Convert.ToInt32(bestScore.Text);
+				lowScore = Convert.ToInt32(worstScore.Text);
+			} catch
+			{
+				MessageBox.Show("Cannot calculate; best and worst scores must be integers.");
+				return;
+			}
 
 			Random r1 = new Random();
 			List<player> playerList = new List<player>();

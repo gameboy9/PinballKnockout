@@ -163,6 +163,7 @@
 			// 
 			// commonFormats
 			// 
+			commonFormats.DropDownStyle = ComboBoxStyle.DropDownList;
 			commonFormats.FormattingEnabled = true;
 			commonFormats.Items.AddRange(new object[] { "Fair strikes", "Progressive strikes", "Single strikes", "Lenient group strikes", "Strict group strikes", "Oprah strikes" });
 			commonFormats.Location = new Point(550, 17);
