@@ -8,6 +8,9 @@ namespace PinballKnockout
 {
 	public partial class Form1 : Form
 	{
+		const int iterations = 10000;
+		bool updating = false;
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -69,13 +72,21 @@ namespace PinballKnockout
 			int worstWins = 0;
 			try
 			{
-				for (int i = 0; i < 1000; i++)
+				int best = Convert.ToInt32(bestScore.Text);
+				int worst = Convert.ToInt32(worstScore.Text);
+				for (int i = 1; i < 101; i++)
 				{
-					if (r1.Next() % Convert.ToInt32(bestScore.Text) > r1.Next() % Convert.ToInt32(worstScore.Text)) bestWins++;
-					else if (r1.Next() % Convert.ToInt32(bestScore.Text) < r1.Next() % Convert.ToInt32(worstScore.Text)) worstWins++;
+					for (int j = 1; j < 101; j++)
+					{
+						int p1Score = (int)(worst * ((double)i / 100));
+						int p2Score = (int)(best * ((double)j / 100));
+						;
+						if (p2Score > p1Score) bestWins++;
+						else if (p1Score > p2Score) worstWins++;
+					}
 				}
 
-				bestWinPct.Text = "Best player win %:  " + string.Format("{0:P1}", (decimal)bestWins / 1000);
+				bestWinPct.Text = "Best player win %:  " + string.Format("{0:P1}", (decimal)bestWins / (100 * 100));
 			}
 			catch
 			{
@@ -89,6 +100,7 @@ namespace PinballKnockout
 			int finalStrikes = Convert.ToInt32(strikes.Value);
 			int finalPlayers = Convert.ToInt32(endPlayers.Value);
 
+			double finalGames = 0.0f;
 			int totalRounds = 0;
 			int minRounds = 9999;
 			int maxRounds = 0;
@@ -99,9 +111,10 @@ namespace PinballKnockout
 			List<player> playerList = new List<player>();
 			List<double> roundResult = new List<double>();
 
-			for (int h = 0; h < 10000; h++)
+			for (int h = 0; h < iterations; h++)
 			{
 				int round = 0;
+				double games = 0.0f;
 
 				playerList.Clear();
 				for (int i = 0; i < players; i++)
@@ -111,6 +124,8 @@ namespace PinballKnockout
 				while (playerList.Where(c => c.strikes < finalStrikes).Count() > finalPlayers)
 				{
 					round++;
+					double totalMeanGames = 0.0f;
+					int totalGames = 0;
 
 					List<player> allowed = playerList.Where(c => c.strikes < finalStrikes).ToList();
 
@@ -118,10 +133,13 @@ namespace PinballKnockout
 					{
 						List<player> match = new List<player>();
 						int matchPlayers = 4;
+						double roundGames = 2.0f;
 						if (allowed.Count == 9 || allowed.Count == 6 || allowed.Count == 5 || allowed.Count == 3)
-							matchPlayers = 3;
+						{ matchPlayers = 3; roundGames = 1.5f; }
 						else if (allowed.Count == 2)
-							matchPlayers = 2;
+						{ matchPlayers = 2; roundGames = 1.0f; }
+
+						totalMeanGames += roundGames;
 
 						for (int j = 0; j < matchPlayers; j++)
 						{
@@ -142,11 +160,14 @@ namespace PinballKnockout
 							if (rank == matchPlayers && matchPlayers >= 3) playerList[match[j].id].strikes += 2;
 							else if (rank != 1) playerList[match[j].id].strikes += 1;
 						}
+						totalGames++;
 					}
+					games += totalMeanGames / totalGames;
 				}
 
 				roundResult.Add(round);
 
+				finalGames += games;
 				totalRounds += round;
 				if (round < minRounds) minRounds = round;
 				if (round > maxRounds) maxRounds = round;
@@ -154,11 +175,17 @@ namespace PinballKnockout
 
 			double stdDev = StandardDeviation(roundResult);
 			double avg = roundResult.Average();
+			int pct5 = (int)(iterations * 0.05);
+			int pct95 = (int)(iterations * 0.95);
+			roundResult.Sort();
 
 			Result.Text = "Average rounds:  " + string.Format("{0:##.00}", roundResult.Average()) +
+				"\r\nMeaningful games:  " + string.Format("{0:##.00}", finalGames / iterations) +
+				"\r\nApprox. TGP:  " + string.Format("{0:P2}", finalGames * 4 / iterations / 100) +
 				"\r\nMost rounds:  " + maxRounds +
 				"\r\nLeast rounds:  " + minRounds +
-				"\r\n95% range:  " + string.Format("{0:##.00}", avg - (stdDev * 2)) + " to " + string.Format("{0:##.00}", avg + (stdDev * 2));
+				"\r\n95% range (2 std. dev.):  " + string.Format("{0:##.00}", avg - (stdDev * 2)) + " to " + string.Format("{0:##.00}", avg + (stdDev * 2)) +
+				"\r\n5th / 95th percentile:  " + roundResult[pct5] + " / " + roundResult[pct95];
 		}
 
 		private double StandardDeviation(IEnumerable<double> values)
@@ -177,6 +204,7 @@ namespace PinballKnockout
 
 		private void commonFormats_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			updating = true;
 			switch (commonFormats.SelectedIndex)
 			{
 				case 0: // fair strikes
@@ -209,6 +237,40 @@ namespace PinballKnockout
 					p31.Value = 0; p32.Value = 1; p33.Value = 1;
 					p41.Value = 0; p42.Value = 1; p43.Value = 1; p44.Value = 1;
 					break;
+			}
+			updating = false;
+		}
+
+		private void clearCommonFormat(object sender, EventArgs e)
+		{
+			if (!updating)
+			{
+				if (p21.Value == 0 && p22.Value == 1 &&
+					p31.Value == 0 && p32.Value == 1 && p33.Value == 2 &&
+					p41.Value == 0 && p42.Value == 1 && p43.Value == 1 && p44.Value == 2)
+					commonFormats.SelectedIndex = 0;
+				else if (p21.Value == 0 && p22.Value == 1 &&
+					p31.Value == 0 && p32.Value == 1 && p33.Value == 2 &&
+					p41.Value == 0 && p42.Value == 1 && p43.Value == 2 && p44.Value == 3)
+					commonFormats.SelectedIndex = 1;
+				else if (p21.Value == 0 && p22.Value == 1 &&
+					p31.Value == 0 && p32.Value == 0 && p33.Value == 1 &&
+					p41.Value == 0 && p42.Value == 0 && p43.Value == 0 && p44.Value == 1)
+					commonFormats.SelectedIndex = 2;
+				else if (p21.Value == 0 && p22.Value == 1 &&
+					p31.Value == 0 && p32.Value == 0 && p33.Value == 1 &&
+					p41.Value == 0 && p42.Value == 0 && p43.Value == 1 && p44.Value == 1)
+					commonFormats.SelectedIndex = 3;
+				else if (p21.Value == 0 && p22.Value == 1 &&
+					p31.Value == 0 && p32.Value == 1 && p33.Value == 1 &&
+					p41.Value == 0 && p42.Value == 0 && p43.Value == 1 && p44.Value == 1)
+					commonFormats.SelectedIndex = 4;
+				else if (p21.Value == 0 && p22.Value == 1 &&
+					p31.Value == 0 && p32.Value == 1 && p33.Value == 1 &&
+					p41.Value == 0 && p42.Value == 1 && p43.Value == 1 && p44.Value == 1)
+					commonFormats.SelectedIndex = 5;
+				else
+					commonFormats.SelectedIndex = -1;
 			}
 		}
 	}

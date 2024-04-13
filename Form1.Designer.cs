@@ -74,7 +74,7 @@
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Location = new Point(12, 20);
+			label1.Location = new Point(12, 21);
 			label1.Name = "label1";
 			label1.Size = new Size(131, 20);
 			label1.TabIndex = 0;
@@ -83,7 +83,7 @@
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(12, 63);
+			label2.Location = new Point(12, 64);
 			label2.Name = "label2";
 			label2.Size = new Size(81, 20);
 			label2.TabIndex = 2;
@@ -92,7 +92,7 @@
 			// label3
 			// 
 			label3.AutoSize = true;
-			label3.Location = new Point(12, 110);
+			label3.Location = new Point(12, 107);
 			label3.Name = "label3";
 			label3.Size = new Size(128, 20);
 			label3.TabIndex = 3;
@@ -101,7 +101,7 @@
 			// label4
 			// 
 			label4.AutoSize = true;
-			label4.Location = new Point(12, 163);
+			label4.Location = new Point(12, 150);
 			label4.Name = "label4";
 			label4.Size = new Size(158, 20);
 			label4.TabIndex = 4;
@@ -110,7 +110,7 @@
 			// label5
 			// 
 			label5.AutoSize = true;
-			label5.Location = new Point(385, 20);
+			label5.Location = new Point(385, 21);
 			label5.Name = "label5";
 			label5.Size = new Size(127, 20);
 			label5.TabIndex = 5;
@@ -119,7 +119,7 @@
 			// label6
 			// 
 			label6.AutoSize = true;
-			label6.Location = new Point(385, 63);
+			label6.Location = new Point(385, 64);
 			label6.Name = "label6";
 			label6.Size = new Size(76, 20);
 			label6.TabIndex = 6;
@@ -128,7 +128,7 @@
 			// label7
 			// 
 			label7.AutoSize = true;
-			label7.Location = new Point(385, 110);
+			label7.Location = new Point(385, 107);
 			label7.Name = "label7";
 			label7.Size = new Size(76, 20);
 			label7.TabIndex = 7;
@@ -137,7 +137,7 @@
 			// label8
 			// 
 			label8.AutoSize = true;
-			label8.Location = new Point(385, 163);
+			label8.Location = new Point(385, 150);
 			label8.Name = "label8";
 			label8.Size = new Size(76, 20);
 			label8.TabIndex = 8;
@@ -146,7 +146,7 @@
 			// label9
 			// 
 			label9.AutoSize = true;
-			label9.Location = new Point(12, 226);
+			label9.Location = new Point(12, 193);
 			label9.Name = "label9";
 			label9.Size = new Size(121, 20);
 			label9.TabIndex = 9;
@@ -155,7 +155,7 @@
 			// label10
 			// 
 			label10.AutoSize = true;
-			label10.Location = new Point(12, 270);
+			label10.Location = new Point(12, 239);
 			label10.Name = "label10";
 			label10.Size = new Size(131, 20);
 			label10.TabIndex = 10;
@@ -165,97 +165,107 @@
 			// 
 			commonFormats.FormattingEnabled = true;
 			commonFormats.Items.AddRange(new object[] { "Fair strikes", "Progressive strikes", "Single strikes", "Lenient group strikes", "Strict group strikes", "Oprah strikes" });
-			commonFormats.Location = new Point(592, 18);
+			commonFormats.Location = new Point(550, 17);
 			commonFormats.Name = "commonFormats";
-			commonFormats.Size = new Size(151, 28);
+			commonFormats.Size = new Size(193, 28);
 			commonFormats.TabIndex = 11;
 			commonFormats.SelectedIndexChanged += commonFormats_SelectedIndexChanged;
 			// 
 			// p41
 			// 
-			p41.Location = new Point(484, 161);
+			p41.Location = new Point(484, 147);
 			p41.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p41.Name = "p41";
 			p41.Size = new Size(49, 27);
 			p41.TabIndex = 14;
 			p41.TextAlign = HorizontalAlignment.Right;
+			p41.ValueChanged += clearCommonFormat;
 			// 
 			// p42
 			// 
-			p42.Location = new Point(550, 161);
+			p42.Location = new Point(550, 147);
 			p42.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p42.Name = "p42";
 			p42.Size = new Size(49, 27);
 			p42.TabIndex = 15;
 			p42.TextAlign = HorizontalAlignment.Right;
+			p42.ValueChanged += clearCommonFormat;
 			// 
 			// p43
 			// 
-			p43.Location = new Point(624, 161);
+			p43.Location = new Point(624, 147);
 			p43.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p43.Name = "p43";
 			p43.Size = new Size(49, 27);
 			p43.TabIndex = 16;
 			p43.TextAlign = HorizontalAlignment.Right;
+			p43.ValueChanged += clearCommonFormat;
 			// 
 			// p44
 			// 
-			p44.Location = new Point(694, 161);
+			p44.Location = new Point(694, 147);
 			p44.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p44.Name = "p44";
 			p44.Size = new Size(49, 27);
 			p44.TabIndex = 17;
 			p44.TextAlign = HorizontalAlignment.Right;
+			p44.ValueChanged += clearCommonFormat;
 			// 
 			// p33
 			// 
-			p33.Location = new Point(694, 110);
+			p33.Location = new Point(694, 104);
 			p33.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p33.Name = "p33";
 			p33.Size = new Size(49, 27);
 			p33.TabIndex = 20;
 			p33.TextAlign = HorizontalAlignment.Right;
+			p33.ValueChanged += clearCommonFormat;
 			// 
 			// p32
 			// 
-			p32.Location = new Point(624, 110);
+			p32.Location = new Point(624, 104);
 			p32.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p32.Name = "p32";
 			p32.Size = new Size(49, 27);
 			p32.TabIndex = 19;
 			p32.TextAlign = HorizontalAlignment.Right;
+			p32.ValueChanged += clearCommonFormat;
 			// 
 			// p31
 			// 
-			p31.Location = new Point(550, 110);
+			p31.Location = new Point(550, 104);
 			p31.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p31.Name = "p31";
 			p31.Size = new Size(49, 27);
 			p31.TabIndex = 18;
 			p31.TextAlign = HorizontalAlignment.Right;
+			p31.ValueChanged += clearCommonFormat;
 			// 
 			// p22
 			// 
-			p22.Location = new Point(694, 63);
+			p22.Location = new Point(694, 61);
 			p22.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p22.Name = "p22";
 			p22.Size = new Size(49, 27);
 			p22.TabIndex = 22;
 			p22.TextAlign = HorizontalAlignment.Right;
+			p22.ValueChanged += clearCommonFormat;
 			// 
 			// p21
 			// 
-			p21.Location = new Point(624, 63);
+			p21.Location = new Point(624, 61);
 			p21.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
 			p21.Name = "p21";
 			p21.Size = new Size(49, 27);
 			p21.TabIndex = 21;
 			p21.TextAlign = HorizontalAlignment.Right;
+			p21.ValueChanged += clearCommonFormat;
 			// 
 			// groupSize
 			// 
+			groupSize.DropDownStyle = ComboBoxStyle.DropDownList;
 			groupSize.FormattingEnabled = true;
-			groupSize.Items.AddRange(new object[] { "2", "3", "4" });
+			groupSize.Items.AddRange(new object[] { "         2", "         3", "         4" });
 			groupSize.Location = new Point(188, 60);
 			groupSize.Name = "groupSize";
 			groupSize.Size = new Size(73, 28);
@@ -263,7 +273,7 @@
 			// 
 			// strikes
 			// 
-			strikes.Location = new Point(188, 108);
+			strikes.Location = new Point(188, 104);
 			strikes.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
 			strikes.Name = "strikes";
 			strikes.Size = new Size(73, 27);
@@ -272,7 +282,7 @@
 			// 
 			// endPlayers
 			// 
-			endPlayers.Location = new Point(188, 161);
+			endPlayers.Location = new Point(188, 147);
 			endPlayers.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
 			endPlayers.Name = "endPlayers";
 			endPlayers.Size = new Size(73, 27);
@@ -290,7 +300,7 @@
 			// 
 			// button1
 			// 
-			button1.Location = new Point(623, 220);
+			button1.Location = new Point(649, 406);
 			button1.Name = "button1";
 			button1.Size = new Size(94, 29);
 			button1.TabIndex = 27;
@@ -301,15 +311,15 @@
 			// bestWinPct
 			// 
 			bestWinPct.AutoSize = true;
-			bestWinPct.Location = new Point(332, 233);
+			bestWinPct.Location = new Point(385, 193);
 			bestWinPct.Name = "bestWinPct";
-			bestWinPct.Size = new Size(76, 20);
+			bestWinPct.Size = new Size(139, 20);
 			bestWinPct.TabIndex = 28;
-			bestWinPct.Text = "4P Groups";
+			bestWinPct.Text = "Best win pct:  50.0%";
 			// 
 			// bestScore
 			// 
-			bestScore.Location = new Point(176, 223);
+			bestScore.Location = new Point(188, 190);
 			bestScore.Name = "bestScore";
 			bestScore.Size = new Size(125, 27);
 			bestScore.TabIndex = 29;
@@ -317,7 +327,7 @@
 			// 
 			// worstScore
 			// 
-			worstScore.Location = new Point(176, 267);
+			worstScore.Location = new Point(188, 236);
 			worstScore.Name = "worstScore";
 			worstScore.Size = new Size(125, 27);
 			worstScore.TabIndex = 30;
@@ -326,7 +336,7 @@
 			// Result
 			// 
 			Result.AutoSize = true;
-			Result.Location = new Point(12, 315);
+			Result.Location = new Point(12, 282);
 			Result.Name = "Result";
 			Result.Size = new Size(82, 20);
 			Result.TabIndex = 31;
@@ -336,7 +346,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(800, 450);
+			ClientSize = new Size(760, 449);
 			Controls.Add(Result);
 			Controls.Add(worstScore);
 			Controls.Add(bestScore);
