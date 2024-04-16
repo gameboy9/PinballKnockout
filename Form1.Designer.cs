@@ -57,6 +57,8 @@
 			bestScore = new TextBox();
 			worstScore = new TextBox();
 			Result = new Label();
+			firstIterationDetail = new TextBox();
+			label11 = new Label();
 			((System.ComponentModel.ISupportInitialize)p41).BeginInit();
 			((System.ComponentModel.ISupportInitialize)p42).BeginInit();
 			((System.ComponentModel.ISupportInitialize)p43).BeginInit();
@@ -301,7 +303,7 @@
 			// 
 			// button1
 			// 
-			button1.Location = new Point(649, 406);
+			button1.Location = new Point(649, 184);
 			button1.Name = "button1";
 			button1.Size = new Size(94, 29);
 			button1.TabIndex = 27;
@@ -343,11 +345,32 @@
 			Result.TabIndex = 31;
 			Result.Text = "Result here";
 			// 
+			// firstIterationDetail
+			// 
+			firstIterationDetail.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			firstIterationDetail.Location = new Point(337, 282);
+			firstIterationDetail.Multiline = true;
+			firstIterationDetail.Name = "firstIterationDetail";
+			firstIterationDetail.ScrollBars = ScrollBars.Vertical;
+			firstIterationDetail.Size = new Size(548, 248);
+			firstIterationDetail.TabIndex = 32;
+			// 
+			// label11
+			// 
+			label11.AutoSize = true;
+			label11.Location = new Point(337, 259);
+			label11.Name = "label11";
+			label11.Size = new Size(138, 20);
+			label11.TabIndex = 33;
+			label11.Text = "First iteration detail";
+			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(760, 449);
+			ClientSize = new Size(913, 554);
+			Controls.Add(label11);
+			Controls.Add(firstIterationDetail);
 			Controls.Add(Result);
 			Controls.Add(worstScore);
 			Controls.Add(bestScore);
@@ -428,5 +451,7 @@
 		private TextBox bestScore;
 		private TextBox worstScore;
 		private Label Result;
+		private TextBox firstIterationDetail;
+		private Label label11;
 	}
 }

@@ -47,11 +47,11 @@ namespace PinballKnockout
 				groupSize.SelectedIndex = 2; // 4 player groups
 				strikes.Value = 6;
 				endPlayers.Value = 1;
-				bestScore.Text = "40000";
-				worstScore.Text = "10000";
+				bestScore.Text = "40000000";
+				worstScore.Text = "10000000";
 				commonFormats.SelectedIndex = 0; // fair strikes
 				p21.Value = 0;
-				p22.Value = 1;
+				p22.Value = 2;
 				p31.Value = 0;
 				p32.Value = 1;
 				p33.Value = 2;
@@ -95,21 +95,13 @@ namespace PinballKnockout
 			int worstWins = 0;
 			try
 			{
-				int best = Convert.ToInt32(bestScore.Text);
-				int worst = Convert.ToInt32(worstScore.Text);
-				for (int i = 1; i < 101; i++)
-				{
-					for (int j = 1; j < 101; j++)
-					{
-						int p1Score = (int)(worst * ((double)i / 100));
-						int p2Score = (int)(best * ((double)j / 100));
-						;
-						if (p2Score > p1Score) bestWins++;
-						else if (p1Score > p2Score) worstWins++;
-					}
-				}
+				// The randomizer tops out at "best - 1".
+				int best = Convert.ToInt32(bestScore.Text) - 1;
+				int worst = Convert.ToInt32(worstScore.Text) - 1;
+				// Example - 400 vs 100 -> If worst score = 99, 299/400.  If worst score = 0, 399/400.  Ties are possible...
+				double chance = (double)((best - 1) + (best - worst)) / ((best + 1) * 2);
 
-				bestWinPct.Text = "Best player win %:  " + string.Format("{0:P1}", (decimal)bestWins / (100 * 100));
+				bestWinPct.Text = "Best player win %:  " + string.Format("{0:P1}", (decimal)chance);
 			}
 			catch
 			{
@@ -123,7 +115,6 @@ namespace PinballKnockout
 			int finalStrikes = Convert.ToInt32(strikes.Value);
 			int finalPlayers = Convert.ToInt32(endPlayers.Value);
 
-			double finalGames = 0.0f;
 			int totalRounds = 0;
 			int minRounds = 9999;
 			int maxRounds = 0;
@@ -142,11 +133,13 @@ namespace PinballKnockout
 			Random r1 = new Random();
 			List<player> playerList = new List<player>();
 			List<double> roundResult = new List<double>();
+			int[] playerGames = new int[3];
+			string firstIteration = "";
 
 			for (int h = 0; h < iterations; h++)
 			{
 				int round = 0;
-				double games = 0.0f;
+				double strightGames = 0.0f;
 
 				playerList.Clear();
 				for (int i = 0; i < players; i++)
@@ -155,9 +148,10 @@ namespace PinballKnockout
 				}
 				while (playerList.Where(c => c.strikes < finalStrikes).Count() > finalPlayers)
 				{
+					int singlePlayers = playerList.Where(c => c.strikes < finalStrikes).Count();
+					int[] singlePlayerMatches = new int[3];
+
 					round++;
-					double totalMeanGames = 0.0f;
-					int totalGames = 0;
 
 					List<player> allowed = playerList.Where(c => c.strikes < finalStrikes).ToList();
 
@@ -165,13 +159,13 @@ namespace PinballKnockout
 					{
 						List<player> match = new List<player>();
 						int matchPlayers = 4;
-						double roundGames = 2.0f;
 						if (allowed.Count == 9 || allowed.Count == 6 || allowed.Count == 5 || allowed.Count == 3)
-						{ matchPlayers = 3; roundGames = 1.5f; }
+						{ matchPlayers = 3; }
 						else if (allowed.Count == 2)
-						{ matchPlayers = 2; roundGames = 1.0f; }
+						{ matchPlayers = 2; }
 
-						totalMeanGames += roundGames;
+						playerGames[matchPlayers - 2]++;
+						singlePlayerMatches[matchPlayers - 2]++;
 
 						for (int j = 0; j < matchPlayers; j++)
 						{
@@ -189,31 +183,49 @@ namespace PinballKnockout
 								if (k == j) continue;
 								if (match[j].score < match[k].score) rank++;
 							}
-							if (rank == matchPlayers && matchPlayers >= 3) playerList[match[j].id].strikes += 2;
-							else if (rank != 1) playerList[match[j].id].strikes += 1;
+
+							//rank = (int)((double)match[j].score / match[j].chance * matchPlayers) + 1;
+							if (rank == 1 && matchPlayers == 2) playerList[match[j].id].strikes += Convert.ToInt32(p21.Value);
+							if (rank == 2 && matchPlayers == 2) playerList[match[j].id].strikes += Convert.ToInt32(p22.Value);
+							if (rank == 1 && matchPlayers == 3) playerList[match[j].id].strikes += Convert.ToInt32(p31.Value);
+							if (rank == 2 && matchPlayers == 3) playerList[match[j].id].strikes += Convert.ToInt32(p32.Value);
+							if (rank == 3 && matchPlayers == 3) playerList[match[j].id].strikes += Convert.ToInt32(p33.Value);
+							if (rank == 1 && matchPlayers == 4) playerList[match[j].id].strikes += Convert.ToInt32(p41.Value);
+							if (rank == 2 && matchPlayers == 4) playerList[match[j].id].strikes += Convert.ToInt32(p42.Value);
+							if (rank == 3 && matchPlayers == 4) playerList[match[j].id].strikes += Convert.ToInt32(p43.Value);
+							if (rank == 4 && matchPlayers == 4) playerList[match[j].id].strikes += Convert.ToInt32(p44.Value);
 						}
-						totalGames++;
 					}
-					games += totalMeanGames / totalGames;
+					if (h == 0)
+						firstIteration += "R" + round + " -  Players:  " + singlePlayers + " - 4P:  " + singlePlayerMatches[2] + " - 3P:  " + singlePlayerMatches[1] + " - 2P:  " + singlePlayerMatches[0] + "\r\n";
+
+					strightGames++;
 				}
 
 				roundResult.Add(round);
 
-				finalGames += games;
 				totalRounds += round;
 				if (round < minRounds) minRounds = round;
 				if (round > maxRounds) maxRounds = round;
 			}
 
+			firstIterationDetail.Text = firstIteration;
+
 			double stdDev = StandardDeviation(roundResult);
 			double avg = roundResult.Average();
+			double totalGames = playerGames[0] + playerGames[1] + playerGames[2];
+			double totalTGP = playerGames[0] + (1.5 * playerGames[1]) + (2 * playerGames[2]);
 			int pct5 = (int)(iterations * 0.05);
 			int pct95 = (int)(iterations * 0.95);
 			roundResult.Sort();
 
 			Result.Text = "Average rounds:  " + string.Format("{0:##.00}", roundResult.Average()) +
-				"\r\nMeaningful games:  " + string.Format("{0:##.00}", finalGames / iterations) +
-				"\r\nApprox. TGP:  " + string.Format("{0:P2}", finalGames * 4 / iterations / 100) +
+				"\r\nAvg 2P games:  " + string.Format("{0:##.00}", (double)playerGames[0] / iterations) +
+				"\r\nAvg 3P games:  " + string.Format("{0:##.00}", (double)playerGames[1] / iterations) +
+				"\r\nAvg 4P games:  " + string.Format("{0:##.00}", (double)playerGames[2] / iterations) +
+				"\r\nAvg total games:  " + string.Format("{0:##.00}", totalGames / iterations) +
+				"\r\nMeaningful games:  " + string.Format("{0:##.00}", roundResult.Average() * totalTGP / totalGames) + // Iterations not needed because of roundResult.Average()
+				"\r\nApprox. TGP:  " + string.Format("{0:P2}", roundResult.Average() * totalTGP / totalGames * 4 / 100) +
 				"\r\nMost rounds:  " + maxRounds +
 				"\r\nLeast rounds:  " + minRounds +
 				"\r\n95% range (2 std. dev.):  " + string.Format("{0:##.00}", avg - (stdDev * 2)) + " to " + string.Format("{0:##.00}", avg + (stdDev * 2)) +
@@ -240,7 +252,7 @@ namespace PinballKnockout
 			switch (commonFormats.SelectedIndex)
 			{
 				case 0: // fair strikes
-					p21.Value = 0; p22.Value = 1;
+					p21.Value = 0; p22.Value = 2;
 					p31.Value = 0; p32.Value = 1; p33.Value = 2;
 					p41.Value = 0; p42.Value = 1; p43.Value = 1; p44.Value = 2;
 					break;
@@ -277,7 +289,7 @@ namespace PinballKnockout
 		{
 			if (!updating)
 			{
-				if (p21.Value == 0 && p22.Value == 1 &&
+				if (p21.Value == 0 && p22.Value == 2 &&
 					p31.Value == 0 && p32.Value == 1 && p33.Value == 2 &&
 					p41.Value == 0 && p42.Value == 1 && p43.Value == 1 && p44.Value == 2)
 					commonFormats.SelectedIndex = 0;
